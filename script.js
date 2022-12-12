@@ -4,44 +4,49 @@ const phoneDetailsDiv = document.getElementById("post-item-container");
 const showItemsButton = document.getElementById("show-items-button");
 
 async function secondTraining(url) {
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log(data);
-        return data;
-    } catch (err) {
-        console.log('error', err);
-    }
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.log("error", err);
+  }
 }
 
 function createElement(categoryObject) {
-    const { title, thumbnail } = categoryObject;
+  const { title, thumbnail } = categoryObject;
 
-    const categoryDiv = document.createElement("div");
-    categoryDiv.className = "container-box";
+  const categoryDiv = document.createElement("div");
+  categoryDiv.className = "container-box";
 
-    const phoneTitle = document.createElement("h2");
-    phoneTitle.textContent = title;
+  const phoneTitle = document.createElement("h2");
+  phoneTitle.textContent = title;
 
-    const phoneThumbnail = document.createElement("img")
-    phoneThumbnail.setAttribute("src", thumbnail);
-    phoneThumbnail.setAttribute("alt", `${title}`);
+  const phoneThumbnail = document.createElement("img");
+  phoneThumbnail.setAttribute("src", thumbnail);
+  phoneThumbnail.setAttribute("alt", `${title}`);
 
-    categoryDiv.appendChild(phoneTitle);
-    categoryDiv.appendChild(phoneThumbnail);
+  categoryDiv.appendChild(phoneTitle);
+  categoryDiv.appendChild(phoneThumbnail);
 
-    return categoryDiv;
+  return categoryDiv;
+}
+
+async function renderElements() {
+  showItemsButton.textContent = "Loading...";
+  const { products } = await secondTraining(apiBaseUrl + apiEndpoint);
+  products.forEach((el) => {
+    const newCategoryEl = createElement(el);
+    phoneDetailsDiv.appendChild(newCategoryEl);
+  });
+  showItemsButton.textContent = "SHOW ITEMS";
 }
 
 async function main() {
-    phoneDetailsDiv.innerHTML = "";
-    const { products } = await secondTraining(apiBaseUrl + apiEndpoint);
-    products.forEach((el) => {
-        const newCategoryEl = createElement(el);
-        phoneDetailsDiv.appendChild(newCategoryEl);
-    })
+  phoneDetailsDiv.innerHTML = "";
 }
 
 main();
 
-showItemsButton.addEventListener("click", main)
+showItemsButton.addEventListener("click", renderElements);
