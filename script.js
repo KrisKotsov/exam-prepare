@@ -4,10 +4,14 @@ const phoneDetailsDiv = document.getElementById("post-item-container");
 const showItemsButton = document.getElementById("show-items-button");
 
 async function secondTraining(url) {
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log(data);
-    return data;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.log('error', err);
+    }
 }
 
 function createElement(categoryObject) {
